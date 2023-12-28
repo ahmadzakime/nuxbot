@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "username": "accghstd428",
+      "email": "accghstd428@hotmail.com",
+      "password": "lelang18",
+      "tanggalPendaftaran": "10/17/2023",
+      "verificationStatus": false
+    },
+    {
+      "username": "accghstd284hot",
+      "email": "accghstd284@hotmail.com",
+      "password": "lelang18",
+      "tanggalPendaftaran": "10/17/2023",
+      "verificationStatus": false
+    },
+    {
+      "tanggalPendaftaran": "12/27/2023",
+      "verificationStatus": false
+    },
+    {
+      "tanggalPendaftaran": "12/27/2023",
+      "verificationStatus": false
+    },
+    {
+      "tanggalPendaftaran": "12/27/2023",
+      "verificationStatus": false
+    },
+    {
+      "tanggalPendaftaran": "12/27/2023",
+      "verificationStatus": false
+    },
+    {
+      "tanggalPendaftaran": "12/27/2023",
+      "verificationStatus": false
+    },
+    {
+      "tanggalPendaftaran": "12/27/2023",
+      "verificationStatus": false
+    }
+  ]
+}
