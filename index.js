@@ -13,7 +13,7 @@ const { Hercai } = require('hercai');
 const herc = new Hercai();
 const countryFlags = require('./lib/flag');
 const { yta, ytv } = require('./lib/y2mate')
-
+const s = require('./lib/scraper')
 
 const bot = new Telegraf('6136209053:AAGR_HyhNu9Lzz_ZJliAB9-3DbQH0m6anjw');
 const SLAZZER_API_KEY = '3247981dc7f047fdbc677c2a0e67d171'
@@ -470,6 +470,22 @@ bot.command('delhk', (ctx) => {
   heroku2(database);
 
   ctx.reply(`Pengguna dengan username '${criteria}' berhasil dihapus dari database.`);
+});
+
+bot.command('ai', async (ctx) => {
+  const url = ctx.message.text.split(' ')[1];
+ 
+  try {
+   let ai = await herc.question({model:"v3-beta",content: url })
+/* The module will reply based on the message! */
+
+});
+     ctx.reply(ai)
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba menghubungi AI');
+  }
 });
 
 bot.command('passgen', (ctx) => {
