@@ -476,11 +476,31 @@ bot.command('ai', async (ctx) => {
   const url = ctx.message.text.split(' ')[1];
  
   try {
-   let ai = await herc.question({model:"v3-beta",content: url }).then(response => {
-        
-       ctx.reply(ai)
+   let ai = await herc.question({model:"gemini",content: url }).then(response => {
+     ctx.reply(response.reply)
+   });
+  
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba menghubungi AI');
+  }
 });
-/* The module will reply based on the message! */
+
+bot.command('midjourney', async (ctx) => {
+  const que = ctx.message.text.split(' ')[1];
+ 
+  try {
+     /* Available Models */
+/* "v1" , "v2" , "v2-beta" , "v3" (DALL-E) , "lexica" , "prodia" */
+/* Default Model; "v2" */
+   let ai = await herc.drawImage({model:"v4",prompt: que }).then(response => {
+     ctx.replyWithPhoto({
+                          url: response.url
+                        }, {
+                            caption: 'Gambar Berhasil di buat'
+                        })
+   });
   
    console.log('BERHASIL')
   } catch (error) {
