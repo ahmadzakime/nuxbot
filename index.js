@@ -14,7 +14,6 @@ const { yta, ytv } = require('./lib/y2mate')
 
 const bot = new Telegraf('6136209053:AAGR_HyhNu9Lzz_ZJliAB9-3DbQH0m6anjw');
  const SLAZZER_API_KEY = '3247981dc7f047fdbc677c2a0e67d171'
- 
 const {
     simple
 } = require('./lib/myfunc')
