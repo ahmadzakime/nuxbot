@@ -489,12 +489,78 @@ bot.command('ai', async (ctx) => {
 
 bot.command('midjourney', async (ctx) => {
   const que = ctx.message.text.split(' ')[1];
- 
+  ctx.reply(wait)
   try {
      /* Available Models */
 /* "v1" , "v2" , "v2-beta" , "v3" (DALL-E) , "lexica" , "prodia" */
 /* Default Model; "v2" */
    let ai = await herc.drawImage({model:"v4",prompt: que }).then(response => {
+     ctx.replyWithPhoto({
+                          url: response.url
+                        }, {
+                            caption: 'Gambar Berhasil di buat'
+                        })
+   });
+  
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba menghubungi AI');
+  }
+});
+
+bot.command('lexica', async (ctx) => {
+  const que = ctx.message.text.split(' ')[1];
+  ctx.reply(wait)
+  try {
+     /* Available Models */
+/* "v1" , "v2" , "v2-beta" , "v3" (DALL-E) , "lexica" , "prodia" */
+/* Default Model; "v2" */
+   let ai = await herc.drawImage({model:"lexica",prompt: que }).then(response => {
+     ctx.replyWithPhoto({
+                          url: response.url
+                        }, {
+                            caption: 'Gambar Berhasil di buat'
+                        })
+   });
+  
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba menghubungi AI');
+  }
+});
+
+bot.command('dalle', async (ctx) => {
+  const que = ctx.message.text.split(' ')[1];
+  ctx.reply(wait)
+  try {
+     /* Available Models */
+/* "v1" , "v2" , "v2-beta" , "v3" (DALL-E) , "lexica" , "prodia" */
+/* Default Model; "v2" */
+   let ai = await herc.drawImage({model:"v3",prompt: que }).then(response => {
+     ctx.replyWithPhoto({
+                          url: response.url
+                        }, {
+                            caption: 'Gambar Berhasil di buat'
+                        })
+   });
+  
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba menghubungi AI');
+  }
+});
+
+bot.command('prodia', async (ctx) => {
+  const que = ctx.message.text.split(' ')[1];
+  ctx.reply(wait)
+  try {
+     /* Available Models */
+/* "v1" , "v2" , "v2-beta" , "v3" (DALL-E) , "lexica" , "prodia" */
+/* Default Model; "v2" */
+   let ai = await herc.drawImage({model:"prodia",prompt: que }).then(response => {
      ctx.replyWithPhoto({
                           url: response.url
                         }, {
