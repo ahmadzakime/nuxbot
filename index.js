@@ -15,7 +15,7 @@ const countryFlags = require('./lib/flag');
 const { yta, ytv } = require('./lib/y2mate')
 const s = require('./lib/scraper')
 
-const bot = new Telegraf('6136209053:AAGR_HyhNu9Lzz_ZJliAB9-3DbQH0m6anjw');
+const bot = new Telegraf('6136209053:AAEMze5op88eNvucTXd2UkX-tGEuVFYBNw0');
 const SLAZZER_API_KEY = '3247981dc7f047fdbc677c2a0e67d171'
  
 let wait = '⏳ Mohon tunggu sebentar'
@@ -476,11 +476,12 @@ bot.command('ai', async (ctx) => {
   const url = ctx.message.text.split(' ')[1];
  
   try {
-   let ai = await herc.question({model:"v3-beta",content: url })
-/* The module will reply based on the message! */
-
+   let ai = await herc.question({model:"v3-beta",content: url }).then(response => {
+        
+       ctx.reply(ai)
 });
-     ctx.reply(ai)
+/* The module will reply based on the message! */
+  
    console.log('BERHASIL')
   } catch (error) {
     console.error(error);
