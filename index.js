@@ -16,7 +16,10 @@ const { yta, ytv } = require('./lib/y2mate')
 
 
 const bot = new Telegraf('6136209053:AAGR_HyhNu9Lzz_ZJliAB9-3DbQH0m6anjw');
- const SLAZZER_API_KEY = '3247981dc7f047fdbc677c2a0e67d171'
+const SLAZZER_API_KEY = '3247981dc7f047fdbc677c2a0e67d171'
+ 
+let wait = '⏳ Mohon tunggu sebentar'
+ 
 const {
     simple
 } = require('./lib/myfunc')
@@ -476,7 +479,7 @@ bot.command('passgen', (ctx) => {
 
 bot.command('ytmp3', async (ctx) => {
   const url = ctx.message.text.split(' ')[1];
-
+  ctx.reply(wait)
   try {
     const info = await bch.youtubedlv(url)
     const hasil = await data.audio['128kbps'].download()
@@ -493,7 +496,7 @@ bot.command('ytmp3', async (ctx) => {
 
 bot.command('ytmp4', async (ctx) => {
   const url = ctx.message.text.split(' ')[1];
-
+  ctx.reply(wait)
   try {
     const info = await bch.youtubedlv(url)
     const hasil = await data.audio['720p'].download()
@@ -531,7 +534,7 @@ bot.command('pin', async (ctx) => {
 
 bot.command('ig', async (ctx) => {
   const url = ctx.message.text.split(' ')[1];
-
+  ctx.reply(wait)
   try {
     const info = await bch.snapsave(url)   .then(async(result)=> {
                 for(let i of result)
@@ -550,6 +553,39 @@ bot.command('ig', async (ctx) => {
   }
 });
 
+bot.command('tiktok', async (ctx) => {
+  const url = ctx.message.text.split(' ')[1];
+  ctx.reply(wait)
+  try {
+    const info = await api.downloader.tiktok(url)
+                        ctx.replyWithVideo({
+                            url: info.nowm
+                        }, {
+                            caption: 'Video Berhasil Di unduh'
+                        })
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba mengunduh video.');
+  }
+});
+
+bot.command('tiktokaudio', async (ctx) => {
+  const url = ctx.message.text.split(' ')[1];
+  ctx.reply(wait)
+  try {
+    const info = await api.downloader.tiktok(url)
+                        ctx.replyWithAudio({
+                          url: info.audio
+                        }, {
+                            caption: 'Audio Berhasil Di unduh'
+                        })
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba mengunduh video.');
+  }
+});
 
 bot.command('download', async (ctx) => {
   try {
