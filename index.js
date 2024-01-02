@@ -8,6 +8,9 @@ const cheerio = require("cheerio");
 const figlet = require('figlet');
 const os = require('os');
 const request = require('request');
+const api = require("caliph-api");
+const { Hercai } = require('hercai');
+const herc = new Hercai();
 const countryFlags = require('./lib/flag');
 const { yta, ytv } = require('./lib/y2mate')
 
@@ -471,15 +474,33 @@ bot.command('passgen', (ctx) => {
   ctx.reply(`${password}`);
 });
 
-bot.command('yt', async (ctx) => {
+bot.command('ytmp3', async (ctx) => {
   const url = ctx.message.text.split(' ')[1];
 
   try {
-    const info = await bch.youtubedlv2(url)
+    const info = await bch.youtubedlv(url)
+    const hasil = await data.audio['128kbps'].download()
                         ctx.replyWithAudio({
-                            url: info.audio.download
+                            url: hasil
                         })
-   console.log(info)
+   //console.log(info)
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba mengunduh video.');
+  }
+});
+
+bot.command('ytmp4', async (ctx) => {
+  const url = ctx.message.text.split(' ')[1];
+
+  try {
+    const info = await bch.youtubedlv(url)
+    const hasil = await data.audio['720p'].download()
+                        ctx.replyWithVideo({
+                            url: hasil
+                        })
+   //console.log(info)
    console.log('BERHASIL')
   } catch (error) {
     console.error(error);
