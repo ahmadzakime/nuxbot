@@ -472,6 +472,23 @@ bot.command('delhk', (ctx) => {
   ctx.reply(`Pengguna dengan username '${criteria}' berhasil dihapus dari database.`);
 });
 
+
+bot.command('igstalk', async (ctx) => {
+   const url = ctx.message.text.split(' ')[1];
+  ctx.reply(wait)
+  try {
+      const igs = await s.igstalk(url)   
+    // Tampilkan informasi di Telegram
+    const message = `𝗜𝗗 : ${igs.id}\n𝗨𝘀𝗲𝗿𝗻𝗮𝗺𝗲 : ${igs.usernamee}\n𝗡𝗮𝗺𝗮: ${igs.fullname}\n𝗕𝗶𝗼 : ${igs.biog}\n𝗕𝗶𝗼 𝗟𝗶𝗻𝗸 : ${igs.biolink}\n𝗙𝗼𝗹𝗹𝗼𝘄𝗲𝗿 : ${igs.follower}\n𝗙𝗼𝗹𝗹𝗼𝘄𝗲𝗿 : ${igs.following}\n𝗔𝗸𝘂𝗻 𝗕𝗶𝘀𝗻𝗶𝘀 : ${igs.bisnis}\n𝗔𝗸𝘂𝗻 𝗣𝗿𝗼𝗳𝗲𝘀𝗶𝗼𝗻𝗮𝗹 : ${igs.profesional}\n𝗔𝗸𝘂𝗻 𝗣𝗿𝗶𝘃𝗮𝘁𝗲 : ${igs.privatee}\n𝗔𝗸𝘂𝗻 𝗩𝗲𝗿𝗶𝗳𝗶𝗲𝗱 : ${igs.verified}`;
+     
+    console.log('BERHASIL')
+    ctx.replyWithPhoto({ url: igs.profile }, { caption: message });
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mengambil data Instagram.');
+  }
+});
+
 bot.command('ai', async (ctx) => {
   const url = ctx.message.text.split(' ')[1];
  
