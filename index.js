@@ -48,6 +48,71 @@ function findUser(criteria, value) {
   });
 }
 
+function generateRandomPassword() {
+  const length = 12; // Panjang kata sandi
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Karakter yang digunakan
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+}
+
+// Fungsi untuk menyimpan perubahan ke dalam database JSON
+function saveDatabase(database) {
+  fs.writeFileSync('users.json', JSON.stringify(database, null, 2));
+}
+
+// Fungsi untuk memuat database JSON
+function loadDatabase() {
+  try {
+    const data = fs.readFileSync('users.json', 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Gagal memuat database:', err);
+    return { users: [] };
+  }
+}
+
+function saveDatabase(database) {
+  fs.writeFileSync(databasePath, JSON.stringify(database, null, 2));
+}
+
+// Fungsi untuk memuat database JSON
+function loadDatabase() {
+  try {
+    const data = fs.readFileSync(databasePath, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Gagal memuat database:', err);
+    return { users: [] };
+  }
+}
+
+function heroku1() {
+  try {
+    const data = fs.readFileSync('heroku.json', 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Gagal memuat database:', err);
+    return { users: [] };
+  }
+}
+
+function heroku2(database) {
+  fs.writeFileSync('heroku.json', JSON.stringify(database, null, 2));
+}
+
+function filterUsers(kriteria) {
+  const database = loadDatabase();
+  return database.users.filter(user => {
+    // Ganti kondisi di bawah sesuai dengan kriteria yang Anda inginkan
+    return user.username.toLowerCase().includes(kriteria.toLowerCase()) ||
+           user.email.toLowerCase().includes(kriteria.toLowerCase())
+           
+  });
+}
 
 function heroku(criteria, value) {
   return new Promise((resolve, reject) => {
@@ -772,69 +837,3 @@ figlet('HLX BOT SIAP', function(err, data) {
   }
   console.log(data);
 });
-
-function generateRandomPassword() {
-  const length = 12; // Panjang kata sandi
-  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Karakter yang digunakan
-  let password = "";
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    password += charset[randomIndex];
-  }
-  return password;
-}
-
-// Fungsi untuk menyimpan perubahan ke dalam database JSON
-function saveDatabase(database) {
-  fs.writeFileSync('users.json', JSON.stringify(database, null, 2));
-}
-
-// Fungsi untuk memuat database JSON
-function loadDatabase() {
-  try {
-    const data = fs.readFileSync('users.json', 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Gagal memuat database:', err);
-    return { users: [] };
-  }
-}
-
-function saveDatabase(database) {
-  fs.writeFileSync(databasePath, JSON.stringify(database, null, 2));
-}
-
-// Fungsi untuk memuat database JSON
-function loadDatabase() {
-  try {
-    const data = fs.readFileSync(databasePath, 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Gagal memuat database:', err);
-    return { users: [] };
-  }
-}
-
-function heroku1() {
-  try {
-    const data = fs.readFileSync('heroku.json', 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Gagal memuat database:', err);
-    return { users: [] };
-  }
-}
-
-function heroku2(database) {
-  fs.writeFileSync('heroku.json', JSON.stringify(database, null, 2));
-}
-
-function filterUsers(kriteria) {
-  const database = loadDatabase();
-  return database.users.filter(user => {
-    // Ganti kondisi di bawah sesuai dengan kriteria yang Anda inginkan
-    return user.username.toLowerCase().includes(kriteria.toLowerCase()) ||
-           user.email.toLowerCase().includes(kriteria.toLowerCase())
-           
-  });
-}
