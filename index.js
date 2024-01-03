@@ -19,7 +19,7 @@ const bot = new Telegraf('6136209053:AAEMze5op88eNvucTXd2UkX-tGEuVFYBNw0');
 const SLAZZER_API_KEY = '3247981dc7f047fdbc677c2a0e67d171'
  
 let wait = '⏳ Mohon tunggu sebentar'
- 
+
 const {
     simple
 } = require('./lib/myfunc')
@@ -135,6 +135,31 @@ function heroku(criteria, value) {
     });
   });
 }
+
+// Fungsi untuk memeriksa apakah pengguna terdaftar dalam daftar pemblokiran
+function isUserBanned(userId) {
+  const banList = getBanList();
+  return banList.includes(userId);
+}
+
+// Fungsi untuk mendapatkan daftar pengguna yang diblokir dari file
+function getBanList() {
+  try {
+    const banData = fs.readFileSync('ban.json');
+    return JSON.parse(banData);
+  } catch (error) {
+    return [];
+  }
+}
+
+// Middleware untuk memeriksa dan mengabaikan perintah dari pengguna yang diblokir
+bot.use((ctx, next) => {
+  const userId = ctx.from.id;
+  if (isUserBanned(userId)) {
+    return ctx.reply('Anda diblokir dari menggunakan bot ini.');
+  }
+  return next();
+});
 
 bot.use((ctx, next) => {
   const timestamp = new Date().toLocaleTimeString();
@@ -355,6 +380,23 @@ bot.command('s', async (ctx) => {
   });
 });
 
+bot.command('ban', (ctx) => {
+  const userId = ctx.message.text.split(' ')[1];
+
+  if (!userId) {
+    return ctx.reply('Mohon berikan User ID yang ingin diblokir.');
+  }
+
+  const banList = getBanList();
+  if (!banList.includes(userId)) {
+    banList.push(userId);
+    fs.writeFileSync('ban.json', JSON.stringify(banList));
+    ctx.reply(`Pengguna dengan User ID ${userId} telah diblokir.`);
+  } else {
+    ctx.reply(`Pengguna dengan User ID ${userId} sudah diblokir sebelumnya.`);
+  }
+});
+
 bot.command('bin', async (ctx) => {
   const bin = ctx.message.text.split(' ')[1];
 
@@ -537,6 +579,38 @@ bot.command('delhk', (ctx) => {
   ctx.reply(`Pengguna dengan username '${criteria}' berhasil dihapus dari database.`);
 });
 
+bot.command('githubstalk', async (ctx) => {
+  const username = ctx.message.text.split(' ')[1];
+
+  if (!username) {
+    return ctx.reply('Gunakan perintah /githubstalk [username] untuk mengetahui informasi GitHub.');
+  }
+
+  try {
+    const response = await axios.get(`https://api.github.com/users/${username}`);
+    const user = response.data;
+
+    const message = `
+𝗜𝗗: ${user.id}
+𝗝𝗲𝗻𝗶𝘀: ${user.type}
+𝗨𝘀𝗲𝗿𝗻𝗮𝗺𝗲: ${user.login}
+𝗡𝗮𝗺𝗮: ${user.name || 'Tidak Di Temukan'}
+𝗕𝗶𝗼: ${user.bio || 'Tidak Di Temukan'}
+𝗕𝗶𝗼 𝗟𝗶𝗻𝗸: ${user.blog || 'Tidak Di Temukan'}
+𝗙𝗼𝗹𝗹𝗼𝘄𝗲𝗿: ${user.followers}
+𝗙𝗼𝗹𝗹𝗼𝘄𝗶𝗻𝗴: ${user.following}
+𝗣𝘂𝗯𝗹𝗶𝗰 𝗥𝗲𝗽𝗼: ${user.public_repos}
+𝗣𝘂𝗯𝗹𝗶𝗰 𝗚𝗶𝘁𝘀: ${user.public_gists}
+𝗘𝗺𝗮𝗶𝗹: ${user.email || 'Tidak Di Temukan'}
+𝗧𝗮𝗻𝗴𝗴𝗮𝗹 𝗣𝗲𝗺𝗯𝘂𝗮𝘁𝗮𝗻: ${user.created_at}
+    `;
+
+    console.log('BERHASIL')
+    ctx.replyWithPhoto({ url: user.avatar_url }, { caption: message });
+  } catch (error) {
+    ctx.reply('User GitHub tidak ditemukan.');
+  }
+});
 
 bot.command('igstalk', async (ctx) => {
    const url = ctx.message.text.split(' ')[1];
@@ -544,7 +618,7 @@ bot.command('igstalk', async (ctx) => {
   try {
       const igs = await s.igstalk(url)   
     // Tampilkan informasi di Telegram
-    const message = `𝗜𝗗 : ${igs.id}\n𝗨𝘀𝗲𝗿𝗻𝗮𝗺𝗲 : ${igs.usernamee}\n𝗡𝗮𝗺𝗮: ${igs.fullname}\n𝗕𝗶𝗼 : ${igs.biog}\n𝗕𝗶𝗼 𝗟𝗶𝗻𝗸 : ${igs.biolink}\n𝗙𝗼𝗹𝗹𝗼𝘄𝗲𝗿 : ${igs.follower}\n𝗙𝗼𝗹𝗹𝗼𝘄𝗲𝗿 : ${igs.following}\n𝗔𝗸𝘂𝗻 𝗕𝗶𝘀𝗻𝗶𝘀 : ${igs.bisnis}\n𝗔𝗸𝘂𝗻 𝗣𝗿𝗼𝗳𝗲𝘀𝗶𝗼𝗻𝗮𝗹 : ${igs.profesional}\n𝗔𝗸𝘂𝗻 𝗣𝗿𝗶𝘃𝗮𝘁𝗲 : ${igs.privatee}\n𝗔𝗸𝘂𝗻 𝗩𝗲𝗿𝗶𝗳𝗶𝗲𝗱 : ${igs.verified}`;
+    const message = `𝗜𝗗 : ${igs.id}\n𝗨𝘀𝗲𝗿𝗻𝗮𝗺𝗲 : ${igs.usernamee}\n𝗡𝗮𝗺𝗮: ${igs.fullname}\n𝗕𝗶𝗼 : ${igs.biog}\n𝗕𝗶𝗼 𝗟𝗶𝗻𝗸 : ${igs.biolink}\n𝗙𝗼𝗹𝗹𝗼𝘄𝗲𝗿 : ${igs.follower}\n𝗙𝗼𝗹𝗹𝗼𝘄𝗲𝗿 : ${igs.following}\n𝗔𝗸𝘂𝗻 𝗕𝗶𝘀𝗻𝗶𝘀 : ${igs.bisnis  ? 'Akun Bisnis' : 'Bukan Bisnis'}\n𝗔𝗸𝘂𝗻 𝗣𝗿𝗼𝗳𝗲𝘀𝗶𝗼𝗻𝗮𝗹 : ${igs.profesional ? 'Akun Profesional' : 'Bukan Profesional'}\n𝗔𝗸𝘂𝗻 𝗣𝗿𝗶𝘃𝗮𝘁𝗲 : ${igs.privatee ? 'Akun Private: True' : 'Bukan Private'}\n𝗔𝗸𝘂𝗻 𝗩𝗲𝗿𝗶𝗳𝗶𝗲𝗱 : ${igs.verified ? 'Akun Terverifikasi' : 'Akun Tidak Terverifikasi'}`;
      
     console.log('BERHASIL')
     ctx.replyWithPhoto({ url: igs.profile }, { caption: message });
