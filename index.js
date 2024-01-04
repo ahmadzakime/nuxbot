@@ -11,6 +11,7 @@ const request = require('request');
 const api = require("caliph-api");
 const { Hercai } = require('hercai');
 const herc = new Hercai();
+const ceknpwp = require('npwp');
 const countryFlags = require('./lib/flag');
 const { yta, ytv } = require('./lib/y2mate')
 const s = require('./lib/scraper')
@@ -420,9 +421,20 @@ bot.command('bin', async (ctx) => {
   }
 });
 
-// Load database
+bot.command('npwp', async (ctx) => {
+  const number = ctx.message.text.split(' ')[1];
 
-
+  try {
+    const npw = await ceknpwp(number, true)
+    const message = `𝗡𝗼 𝗡𝗣𝗪𝗣 : ${npw.no_npwp}\n𝗜𝗻𝗱𝗲𝗻𝘁𝗶𝘁𝗮𝘀 𝗪𝗮𝗷𝗶𝗯 𝗣𝗮𝗷𝗮𝗸: ${npw.desc.identitas_wajib_pajak}\n𝗦𝘁𝗮𝘁𝘂𝘀 𝗪𝗮𝗷𝗶𝗯 𝗣𝗮𝗷𝗮𝗸 : ${npw.desc.status_wajib_pajak}\n𝗡𝗮𝗺𝗮 𝗞𝗮𝗻𝘁𝗼𝗿: ${npw.desc.kpp.nama_kantor}\n𝗔𝗹𝗮𝗺𝗮𝘁 𝗞𝗮𝗻𝘁𝗼𝗿 : ${npw.desc.kpp.alamat}`;
+    
+    console.log(npw)
+    ctx.reply(message);
+  } catch (error) {
+    console.error('Error fetching NPWP data:', error.message);
+    ctx.reply('Maaf, terjadi kesalahan saat mengambil data NPWP. Silakan coba lagi nanti.');
+  }
+});
 bot.command('verif', (ctx) => {
   let database = JSON.parse(fs.readFileSync('users.json'));
   const users = database.users;
@@ -788,6 +800,44 @@ bot.command('pin', async (ctx) => {
   } catch (error) {
     console.error(error);
     ctx.reply('Terjadi kesalahan saat mencoba mengunduh video.');
+  }
+});
+
+bot.command('happymood', async (ctx) => {
+  const bin = ctx.message.text.split(' ')[1];
+  
+  try {
+    const hpy = await api.search.happymod(bin)
+    for (let i of hpy.result) {
+                   let teks = `⭔ Titile: ${i.title}\n⭔ Link : ${i.link}`
+                   
+               ctx.replyWithPhoto({
+                 url: i.thumb
+                        }, {
+                 caption: teks
+                        })
+                   
+    }
+    console.log('BERHASIL')
+  } catch (error) {
+    console.error(error.message);
+    ctx.reply('Maaf, terjadi kesalahan saat mengambil data HAPPYMOOD. Silakan coba lagi nanti.');
+  }
+});
+
+bot.command('jadwalbioskop', async (ctx) => {
+  const url = ctx.message.text.split(' ')[1];
+  try {
+    const bsk = await bch.bioskop(url)
+    let teks = `⭔ Titile: ${bsk.title}\n⭔ Link : ${bsk.url}\n⭔ Genre : ${bsk.genre}\n⭔ Durasi : ${bsk.duration}\n⭔ Tahun Rilis : ${bsk.realease}\n⭔ Sutradara : ${bsk.director}\n⭔ Pemain : ${bsk.cast}`;
+                   
+               ctx.reply(teks)
+                   
+    console.log(bsk)
+    console.log('BERHASIL')
+  } catch (error) {
+    console.error('Error fetching BIN data:', error.message);
+    ctx.reply('Maaf, terjadi kesalahan saat mengambil data BIN. Silakan coba lagi nanti.');
   }
 });
 
