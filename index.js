@@ -186,10 +186,41 @@ bot.command('menu', async (ctx) => {
 ├ Platform : ${os.platform()}
 ╰❒ Runtime : ${simple.runtime(process.uptime())}
 
-╭─❒ 「 Daftar Menu 」 
+╭─❒ 「 Downloader menu 」 
 ├ /ig link
-├ 
-├ 
+├ /fb link
+├ /ytmp3 link
+├ /ytmp4 link
+├ /tiktokaudio
+├ /tiktok
+
+╭─❒ 「 Artificial Intelegen 」 
+├ /ai 「 Command 」 
+├ /prodia「 Command 」
+├ /lexica「 Command 」
+├ /prodia「 Command 」
+├ /midjourney「 Command 」
+├ /dalle「 Command 」
+╰❒ 
+
+╭─❒ 「 Search」 
+├ /pin 
+├ /happymood 
+├ /kusonime 「 Anime 」
+├ /google 「 Comming Soon 」 
+├ /bin 「 Number 」 
+
+╭─❒ 「 Stalking 」 
+├ /igstalk 「 Username 」 
+├ /githubstalk 「 Username 」 
+├ /-
+├ /-
+╰❒ 
+
+╭─❒ 「  Random 」 
+├ /passgen「 Generate 」
+├ /-
+├ /-
 ╰❒ m`);
 });
 
@@ -825,19 +856,43 @@ bot.command('happymood', async (ctx) => {
   }
 });
 
-bot.command('jadwalbioskop', async (ctx) => {
+bot.command('kusonime', async (ctx) => {
   const url = ctx.message.text.split(' ')[1];
   try {
-    const bsk = await bch.bioskop(url)
-    let teks = `⭔ Titile: ${bsk.title}\n⭔ Link : ${bsk.url}\n⭔ Genre : ${bsk.genre}\n⭔ Durasi : ${bsk.duration}\n⭔ Tahun Rilis : ${bsk.realease}\n⭔ Sutradara : ${bsk.director}\n⭔ Pemain : ${bsk.cast}`;
+    const bsk = await api.search.kusonime(url)
+    
+    let teks = `⭔ Judul: ${bsk.result.judul}\n⭔ Desc : ${bsk.result.desk}\n⭔ Genre : ${bsk.result.genre}\n⭔ Status : ${bsk.result.status}\n⭔ Produser : ${bsk.result.produser}\n⭔ Rate : ${bsk.result.rate}\n⭔ Type : ${bsk.result.type}\n⭔ Total Episode : ${bsk.result.total_eps}\n⭔ Durasi Per eps : ${bsk.result.durasi}\n⭔ Tanggal Rilis : ${bsk.result.tgl_rilis}`;
                    
-               ctx.reply(teks)
-                   
-    console.log(bsk)
+               ctx.replyWithPhoto({
+                            url: bsk.result.thumb
+                        }, {
+                            caption: teks
+                        })
+              
+    //console.log(bsk)
     console.log('BERHASIL')
   } catch (error) {
     console.error('Error fetching BIN data:', error.message);
     ctx.reply('Maaf, terjadi kesalahan saat mengambil data BIN. Silakan coba lagi nanti.');
+  }
+});
+
+bot.command('fb', async (ctx) => {
+  const url = ctx.message.text.split(' ')[1];
+  ctx.reply(wait)
+  try {
+    const info = await bch.facebookdlv2(url)
+    const hasil = await info.result.url
+                        ctx.replyWithVideo({
+                            url: hasil
+                        }, {
+                            caption: 'Video Berhasil Di unduh'
+                        })
+   //console.log(info)
+   console.log('BERHASIL')
+  } catch (error) {
+    console.error(error);
+    ctx.reply('Terjadi kesalahan saat mencoba mengunduh video.');
   }
 });
 
